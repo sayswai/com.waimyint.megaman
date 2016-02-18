@@ -113,21 +113,21 @@ public class main {
             }
             int speed = 5;
             
-	            if (kbState[KeyEvent.VK_LEFT] || kbState[KeyEvent.VK_A] && inBounds(spritePos[0]-speed, spritePos[1], window.getWidth(), window.getHeight())) {//left
+	            if ((kbState[KeyEvent.VK_LEFT] || kbState[KeyEvent.VK_A]) && inBounds(spritePos[0]-speed, spritePos[1], window.getWidth(), window.getHeight())) {//left
 	                 spritePos[0] -= speed;
 	                 spriteTex = 2;
 	            }
 	
-	            if (kbState[KeyEvent.VK_RIGHT]|| kbState[KeyEvent.VK_D] && inBounds(spritePos[0]+speed, spritePos[1], window.getWidth(), window.getHeight())) {//right
+	            if ((kbState[KeyEvent.VK_RIGHT]|| kbState[KeyEvent.VK_D]) && inBounds(spritePos[0]+speed, spritePos[1], window.getWidth(), window.getHeight())) {//right
 	            	  spritePos[0] += speed;
 	            	  spriteTex = 1;
 	            }
 	
-	            if (kbState[KeyEvent.VK_UP]|| kbState[KeyEvent.VK_W] && inBounds(spritePos[0], spritePos[1]-speed, window.getWidth(), window.getHeight())) {//up
+	            if ((kbState[KeyEvent.VK_UP]|| kbState[KeyEvent.VK_W]) && inBounds(spritePos[0], spritePos[1]-speed, window.getWidth(), window.getHeight())) {//up
 	                spritePos[1] -= speed;
 	            }
 	
-	            if (kbState[KeyEvent.VK_DOWN]|| kbState[KeyEvent.VK_S] && inBounds(spritePos[0], spritePos[1]+speed, window.getWidth(), window.getHeight())) {//down
+	            if ((kbState[KeyEvent.VK_DOWN]|| kbState[KeyEvent.VK_S]) && inBounds(spritePos[0], spritePos[1]+speed, window.getWidth(), window.getHeight())) {//down
 	                spritePos[1] += speed;
 	            }
            

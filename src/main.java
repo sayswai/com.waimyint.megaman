@@ -13,7 +13,11 @@ import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLException;
 import com.jogamp.opengl.GLProfile;
+import com.jogamp.opengl.util.awt.TextRenderer;
+import com.jogamp.opengl.util.gl2.GLUT;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.io.*;
 import java.net.URL;
 import java.nio.ByteBuffer;
@@ -30,13 +34,20 @@ public class main {
 
     // Position of the sprite.
     private static int[] spritePos = new int[] { 10, 10 };
+    private static int[] aiPos = new int[] {200, 200};
 
     // Texture for the sprite.
-    private static int spriteTex;
+    private static int spriteTex, bgTex, aiTex;
 
     // Size of the sprite.
     private static int[] spriteSize = new int[2];
+    private static int[] bgSize = new int[2];
+    private static int[] aiSize = new int [2];
+    
+    //Ai
+    private static boolean aiOn = false;
 
+    //Text
     /**
      * Checks to see if sprite is in bounds of window
      * @return true if in bounds \ false if out of bounds
@@ -91,7 +102,10 @@ public class main {
         // Load the texture.
         spriteTex = glTexImageTGAFile(gl, "Mega-Man-transparent.tga", spriteSize);
         spriteTex = glTexImageTGAFile(gl, "Mega-man-transparent-left.tga", spriteSize);
+        bgTex = glTexImageTGAFile(gl, "bg.tga", bgSize);
         
+        aiTex = glTexImageTGAFile(gl, "Mega-Man-transparent.tga", aiSize);
+        aiTex = glTexImageTGAFile(gl, "Mega-man-transparent-left.tga", aiSize);
         /*Positioning Sprite to be in the middle*/
         spritePos[0] = window.getWidth()/2;
         spritePos[1] = window.getHeight()/2;
@@ -127,22 +141,110 @@ public class main {
 	                spritePos[1] -= speed;
 	            }
 	
-	            if ((kbState[KeyEvent.VK_DOWN]|| kbState[KeyEvent.VK_S]) && inBounds(spritePos[0], spritePos[1]+speed, window.getWidth(), window.getHeight())) {//down
+	            if ((kbState[KeyEvent.VK_DOWN]|| kbState[KeyEvent.VK_S]) && inBounds(spritePos[0], spritePos[1]+speed, window.getWidth(), window.getHeight()-10)) {//down
 	                spritePos[1] += speed;
 	            }
-           
-            gl.glClearColor(0, 0, 0, 1);
+	            
+	            //ai
+	            if(kbState[KeyEvent.VK_M])
+	            {aiOn = false;}
+	            if(kbState[KeyEvent.VK_N])
+	            {aiOn = true;}
+	            if(aiOn){
+	            	updateAi();
+	            }
+	            
+	        gl.glClearColor(0, 0, 0, 1);
             gl.glClear(GL2.GL_COLOR_BUFFER_BIT);
-
-            glDrawSprite(gl, spriteTex, spritePos[0], spritePos[1], spriteSize[0], spriteSize[1]);
-
-            // Present to the player.
-            //window.swapBuffers();
+           
+            
+        	
+        	
+            glDrawSprite(gl, bgTex, 0, 0, bgSize[0], bgSize[1]);
+            initiateText(gl, window);
+            glDrawSprite(gl, spriteTex, spritePos[0], spritePos[1], spriteSize[0]+10, spriteSize[1]+10);
+            glDrawSprite(gl,aiTex, aiPos[0], aiPos[1], aiSize[0]+10, aiSize[1]+10);
+            
+            
+            
+            
         }
         System.exit(0);
     }
 
-    // Load a file into an OpenGL texture and return that texture.
+    private static void initiateText(GL2 gl, GLWindow window) {
+    	String text = "AI Position: ("+aiPos[0]+","+aiPos[1]+")  Your Position: ("+spritePos[0]+","+spritePos[1]+")";
+    	 if(aiOn){
+         	glWrite(gl, Color.green, 2,  window.getHeight()-15, window.getWidth(), window.getHeight(), "AI ON", 15);
+         }else{
+         	glWrite(gl, Color.red, 2, window.getHeight()-15, window.getWidth(), window.getHeight(), "AI OFF", 15);
+         }
+         glWrite(gl, Color.white,50, window.getHeight()-50, window.getWidth(), window.getHeight(), text, 20);
+         glWrite(gl, Color.white,50, window.getHeight()-50-20, window.getWidth(), window.getHeight(), "Use WASD to move", 12);
+         glWrite(gl, Color.white,50, window.getHeight()-50-20-12, window.getWidth(), window.getHeight(), "Press N to turn on the AI", 12);
+         glWrite(gl, Color.white,50, window.getHeight()-50-20-12-12, window.getWidth(), window.getHeight(), "Press M to turn off the AI", 12);
+        
+        
+		
+	}
+	private static void glWrite(GL2 gl, Color color, int x, int y, int widthRes, int heightRes, String text, int fontSize) {
+		/*TextRenderer txt = new TextRenderer(new Font("Verdana", Font.BOLD, 12));
+		txt.beginRendering(300,300);
+		txt.setColor(Color.WHITE);
+		txt.setSmoothing(true);
+		
+		txt.draw(text, x, y);*/
+    	TextRenderer render = new TextRenderer(new Font("Verdana", Font.BOLD, fontSize));
+    	render.beginRendering(widthRes, heightRes);
+    	render.setColor(color);
+    	render.draw(text, x, y);
+    	render.endRendering();
+    	
+	}
+	private static void updateAi() {
+		int speed = 2;
+		if(aiPos[0] < spritePos[0] || kbState[KeyEvent.VK_L])
+		{
+
+			if(checkAiBounds()){
+			aiTex = 1;
+			aiPos[0] += speed;
+			}
+		}
+		if(aiPos[0] > spritePos[0] || kbState[KeyEvent.VK_J])
+		{
+			if(checkAiBounds())
+			{
+			aiTex = 2;
+			aiPos[0] -= speed;
+			}
+		}
+		if(aiPos[1] < spritePos[1] || kbState[KeyEvent.VK_I])
+		{
+			if(checkAiBounds()){
+			aiPos[1] += speed;
+			}
+		}
+		if(aiPos[1] > spritePos[1] || kbState[KeyEvent.VK_K])
+		{
+			if(checkAiBounds()){
+			aiPos[1] -= speed;
+			}
+		}
+		
+		
+	}
+	private static boolean checkAiBounds() {
+	
+		//x-bound
+		if((aiPos[0] < spritePos[0]-50 || aiPos[0] > spritePos[0]+spriteSize[0]+20)){
+			
+			return true;
+		}
+		//y-bound
+		return false;
+	}
+	// Load a file into an OpenGL texture and return that texture.
     public static int glTexImageTGAFile(GL2 gl, String filename, int[] out_size) {
         final int BPP = 4;
 
@@ -228,6 +330,10 @@ public class main {
             gl.glTexCoord2f(0, 0);
             gl.glVertex2i(x, y + h);
         }
+        
         gl.glEnd();
     }
+
+
+	
 }

@@ -51,6 +51,7 @@ public class Text {
 	public void setSize(int size)
 	{
 		this.fontSize = size;
+		this.font = new Font("Verdana", Font.BOLD, fontSize);
 	}
 	
 	public int getSize()

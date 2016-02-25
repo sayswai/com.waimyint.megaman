@@ -14,34 +14,34 @@ public class main {
     public static void main(String[] args)
     {
     	Window.createWindow(640, 480, "Michael Finder's Apprentice");
-    	
+    	Font font = new Font("Verdana", Font.BOLD, 24); int spacing = Window.window.getHeight()-20;
     	/*Initialize Keyboard*/
-    	System.out.println("Initializing Keyboard..");
+    	TextController.glWrite(Color.white, 0, spacing, "Initializing Keyboard..", font); spacing-= 24;
     	Keyboard.initializeKb();
     	
     	/*Initialize Characters*/
-    	System.out.println("Initializing Characters..");
+    	TextController.glWrite(Color.white, 0, spacing, "Initializing Characters..", font); spacing-=24;
     	Player one = new Player("Mega", 5, false);
     	Player bot = new Player("Pet", 4, true, one);
     	Background bg = new Background();
     	
     	/*Initialize Text*/
-    	System.out.println("Initializing Text...");
-    	Text AiOn = new Text("AI ON"); AiOn.setColor(Color.green); AiOn.setY(480-12);
-    	Text AiOff = new Text("AI OFF"); AiOff.setColor(Color.red); AiOff.setY(480-12);
-    	Text AiSwitch = new Text("N to turn ON | M to turn OFF"); AiSwitch.setColor(Color.gray); AiSwitch.setY(480-24);
+    	TextController.glWrite(Color.white, 0, spacing, "Initializing Texts..", font); spacing-=24;
+    	Text AiOn = new Text("AI ON"); AiOn.setColor(Color.green); AiOn.setY(480-52);
+    	Text AiOff = new Text("AI OFF"); AiOff.setColor(Color.red); AiOff.setY(480-52);
+    	Text AiSwitch = new Text("N to turn ON | M to turn OFF"); AiSwitch.setColor(Color.white); AiSwitch.setY(480-64);
     	Text HUD = new Text("TAG"); HUD.setColor(Color.white); HUD.centerX(); HUD.setSize(24);
     
     	
     	/*Load Textures*/
-    	System.out.println("Initializing Textures..");
+    	TextController.glWrite(Color.white, 0, spacing, "Initializing Textures...", font); spacing-=24;
         one.loadTexture("right","Mega-Man-transparent.tga");
         one.loadTexture("left","Mega-man-transparent-left.tga");
         bot.loadTexture("right","petRight.tga");
         bot.loadTexture("left","petLeft.tga");
         bg.loadTexture("bg.tga");
         
-        TileBG tileBG = new TileBG("tile.tga");
+        TileBG tiles = new TileBG(1);
         
         
         
@@ -61,12 +61,11 @@ public class main {
                 break;
             }
 
-            // Game logic.
+            /*Game Logic*/
             if (Keyboard.getKbState()[KeyEvent.VK_ESCAPE]) {
                 shouldExit = true;
             }
             
-            /*On the run*/
             one.move();
             bot.move();
             
@@ -74,9 +73,8 @@ public class main {
             Window.clearWindow();
             
             /*Draw present*/
-            
             bg.draw();
-            tileBG.draw();
+            tiles.draw();
             
             if(bot.isAimoving)
             {

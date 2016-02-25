@@ -5,7 +5,8 @@ public class SpriteCharacter {
 	protected int[] Pos = new int[]{10, 10};
 	
 	/*Texture of Sprite*/
-	protected int Tex;
+	protected int rightTex, leftTex, upTex, downTex;
+	protected int currentTex;
 	
 	/*Size of sprite*/
 	protected int[] Size = new int[2];
@@ -15,21 +16,42 @@ public class SpriteCharacter {
 	/*Player Statistics*/
 	protected String name;
 	protected int speed;
+	protected boolean isAi = false;
+	protected boolean isAimoving = false;
+	protected boolean inJump = false;
+	protected boolean beginJump = false;
+	protected boolean endJump = false;
+	protected int	jumpVal = 0;
 	
-	public SpriteCharacter(String name, int speed)
+	public SpriteCharacter(String name, int speed, boolean isAi)
 	{
 		this.name = name;
 		this.speed = speed;
+		this.isAi = isAi;
 	}
 	
-	public void loadTexture(String texture)
+	public void loadTexture(String direction, String texture)
 	{
-		Tex = TGAController.glTexImageTGAFile(Window.gl, texture, Size);
+		 
+		if(direction.equals("up")){
+			upTex = TGAController.glTexImageTGAFile(Window.gl, texture, Size);
+			currentTex = upTex;
+		}else if(direction.equals("down")){
+			downTex = TGAController.glTexImageTGAFile(Window.gl, texture, Size);
+			currentTex = downTex;
+		}else if(direction.equals("right")){
+			rightTex = TGAController.glTexImageTGAFile(Window.gl, texture, Size);
+			currentTex = rightTex;
+		}else{
+			leftTex = TGAController.glTexImageTGAFile(Window.gl, texture, Size);
+			currentTex = leftTex;
+		}
+		
 	}
 	
 	public void draw()
 	{
-		TGAController.glDrawSprite(Window.gl, Tex, Pos[0], Pos[1], Size[0]+10, Size[1]+10);
+		TGAController.glDrawSprite(Window.gl, currentTex, Pos[0], Pos[1], Size[0]+10, Size[1]+10);
 	}
 	
 	protected static boolean inBounds(int nextx, int nexty, int xbound, int ybound){

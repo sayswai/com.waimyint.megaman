@@ -1,9 +1,13 @@
+import java.awt.Color;
+import java.awt.Font;
+
 import com.jogamp.nativewindow.WindowClosingProtocol.WindowClosingMode;
 import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLException;
 import com.jogamp.opengl.GLProfile;
+import com.jogamp.opengl.util.awt.TextRenderer;
 
 
 public class Window {
@@ -47,6 +51,7 @@ public static void clearWindow()
 	 gl.glClearColor(0, 0, 0, 1);
      gl.glClear(GL2.GL_COLOR_BUFFER_BIT);
 }
+
 
 
 }

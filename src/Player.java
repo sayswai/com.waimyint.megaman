@@ -30,12 +30,12 @@ public class Player extends SpriteCharacter {
 		if(!isAi){
 			if (Keyboard.getKbState()[KeyEvent.VK_A] && inBounds(Pos[0]-speed, Pos[1], Window.window.getWidth(), Window.window.getHeight())) {//left
 	            Pos[0] -= speed;
-	            currentTex = leftTex;
+	            position = 0;
 	       }
 	
 	       if (Keyboard.getKbState()[KeyEvent.VK_D] && inBounds(Pos[0]+speed, Pos[1], Window.window.getWidth(), Window.window.getHeight())) {//right
 	       	  Pos[0] += speed;
-	       	  currentTex = rightTex;
+	       	  position = 1;
 	       }
 	
 	       if (Keyboard.getKbState()[KeyEvent.VK_W] && inBounds(Pos[0], Pos[1]-speed, Window.window.getWidth(), Window.window.getHeight())) {//up
@@ -45,6 +45,8 @@ public class Player extends SpriteCharacter {
 	       if (Keyboard.getKbState()[KeyEvent.VK_S] && inBounds(Pos[0], Pos[1]+speed, Window.window.getWidth(), Window.window.getHeight()-10)) {//down
 	           Pos[1] += speed;
 	       }
+	       idleLeft.update(); idleRight.update();
+	       
 	       /*
 	       if(inJump)
 	       {

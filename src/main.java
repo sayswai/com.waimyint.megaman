@@ -29,16 +29,23 @@ public class main {
     	TextController.glWrite(Color.white, 0, spacing, "Initializing Texts..", font); spacing-=24;
     	Text AiOn = new Text("AI ON"); AiOn.setColor(Color.green); AiOn.setY(480-52);
     	Text AiOff = new Text("AI OFF"); AiOff.setColor(Color.red); AiOff.setY(480-52);
-    	Text AiSwitch = new Text("N to turn ON | M to turn OFF"); AiSwitch.setColor(Color.white); AiSwitch.setY(480-64);
-    	Text HUD = new Text("TAG"); HUD.setColor(Color.white); HUD.centerX(); HUD.setSize(24);
+    	Text AiSwitch = new Text("N to turn ON | M to turn OFF ||| Currently Not Working"); AiSwitch.setColor(Color.white); AiSwitch.setY(480-64);
+    	
     
     	
     	/*Load Textures*/
+    	String[] leftTex = {"kirby1left.tga", "kirby2left.tga", "kirby3left.tga", "kirby4left.tga"};
+    	String[] rightTex = {"kirby1.tga", "kirby2.tga", "kirby3.tga", "kirby4.tga"};
+    	SpriteAnimationDef idleLeft = new SpriteAnimationDef("idleLeft", leftTex.length, leftTex);
+    	SpriteAnimationDef idleRight = new SpriteAnimationDef("idleRight", rightTex.length, rightTex);
+    	one.idleLeft.def = idleLeft; one.idleLeft.counter = 0; one.idleLeft.secsUnitNextFrame = 0; one.idleLeft.direction = 0;
+    	one.idleRight.def = idleRight; one.idleRight.counter = 0; one.idleRight.secsUnitNextFrame = 0; one.idleRight.direction = 0;
+    	
+    	
     	TextController.glWrite(Color.white, 0, spacing, "Initializing Textures...", font); spacing-=24;
-        one.loadTexture("right","kirby2.tga");
-        one.loadTexture("left","kirby2left.tga");
-        bot.loadTexture("right","petRight.tga");
-        bot.loadTexture("left","petLeft.tga");
+     
+        //bot.loadTexture("right","petRight.tga");
+        //bot.loadTexture("left","petLeft.tga");
         bg.loadTexture("bg.tga");
         
         TileBG tiles = new TileBG(1);
@@ -67,7 +74,7 @@ public class main {
             }
             
             one.move();
-            bot.move();
+            //bot.move();
             
             /*Clear Past*/
             Window.clearWindow();
@@ -83,10 +90,9 @@ public class main {
             	AiOff.draw();
             }
             AiSwitch.draw();
-            HUD.draw();
            
             one.draw();
-            bot.draw();
+           // bot.draw();
             
            
            

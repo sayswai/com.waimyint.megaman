@@ -4,14 +4,8 @@ public class SpriteCharacter {
 	/*Position of sprite (x, y)*/
 	protected int[] Pos = new int[]{10, 10};
 	
-	/*Texture of Sprite*/
-	protected int rightTex, leftTex, upTex, downTex;
-	protected int currentTex;
-	
-	/*Size of sprite*/
-	protected int[] Size = new int[2];
-	
-
+	/*Texture of Sprites*/
+	AnimationData idleLeft, idleRight, rightmove, leftMove;
 	
 	/*Player Statistics*/
 	protected String name;
@@ -22,36 +16,87 @@ public class SpriteCharacter {
 	protected boolean beginJump = false;
 	protected boolean endJump = false;
 	protected int	jumpVal = 0;
+	protected int position = 0; //0 = left, 1 = right
+	
+	
+	class AnimationData{
+		SpriteAnimationDef def;
+		int counter, curFrame, direction; //direction = 0  = counting up || direction = 1 = counting down
+		int[] curFrameSize = new int[2];
+		float secsUnitNextFrame;
+		
+		void update()
+		{
+			if(secsUnitNextFrame != 0)
+			{
+				float delta = System.nanoTime() - secsUnitNextFrame;
+				if(delta>=def.getFrameTime(counter)){
+					if(direction == 0 && counter == def.frames.length-1)//counting up and hit the right end of the frames
+					{
+						direction = 1; //count down
+						counter--;
+					}else if(direction == 1 && counter == 0){//counting down and hit the left end of the frames
+						direction = 0; //count up
+						counter++;
+					}else if(direction == 0){//counting up
+						counter++;
+					}else if(direction == 1){//counting down
+						counter--;
+					}
+					
+				curFrame = def.getFrameTex(counter);
+				secsUnitNextFrame = System.nanoTime();
+				}
+				
+				
+			}else{
+				secsUnitNextFrame = System.nanoTime();
+				curFrame = def.getFrameTex(counter);
+				curFrameSize = def.size;
+			}
+		}
+		
+		void draw()
+		{
+			TGAController.glDrawSprite(Window.gl, curFrame, Pos[0], Pos[1], curFrameSize[0]+10, curFrameSize[1]+10);
+		}
+	}
 	
 	public SpriteCharacter(String name, int speed, boolean isAi)
 	{
 		this.name = name;
 		this.speed = speed;
 		this.isAi = isAi;
+		idleLeft = new AnimationData();
+		idleRight = new AnimationData();
+		
 	}
-	
+	/*
 	public void loadTexture(String direction, String texture)
 	{
 		 
 		if(direction.equals("up")){
 			upTex = TGAController.glTexImageTGAFile(Window.gl, texture, Size);
-			currentTex = upTex;
 		}else if(direction.equals("down")){
 			downTex = TGAController.glTexImageTGAFile(Window.gl, texture, Size);
-			currentTex = downTex;
 		}else if(direction.equals("right")){
 			rightTex = TGAController.glTexImageTGAFile(Window.gl, texture, Size);
-			currentTex = rightTex;
 		}else{
 			leftTex = TGAController.glTexImageTGAFile(Window.gl, texture, Size);
-			currentTex = leftTex;
 		}
 		
 	}
+	*/
 	
 	public void draw()
 	{
-		TGAController.glDrawSprite(Window.gl, currentTex, Pos[0], Pos[1], Size[0]+10, Size[1]+10);
+		if(position == 0)//left
+		{
+			idleLeft.draw();
+		}else{
+			idleRight.draw();
+		}
+		//TGAController.glDrawSprite(Window.gl, currentTex, Pos[0], Pos[1], Size[0]+10, Size[1]+10);
 	}
 	
 	protected static boolean inBounds(int nextx, int nexty, int xbound, int ybound){
@@ -69,15 +114,6 @@ public class SpriteCharacter {
 		Pos = pos;
 	}
 	 
-	
-
-	public int[] getSize() {
-		return Size;
-	}
-
-	public void setSize(int[] size) {
-		Size = size;
-	}
 
 	public String getName() {
 		return name;

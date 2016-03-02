@@ -8,6 +8,7 @@ public class AIcontroller {
 			if(checkAiBounds(AI.Pos, leader)){
 			//AI.currentTex = AI.rightTex;
 			AI.Pos[0] += AI.speed;
+			AI.position = 1;
 			}
 		}
 		if(AI.Pos[0] > leader.getPos()[0])
@@ -16,6 +17,7 @@ public class AIcontroller {
 			{
 			//AI.currentTex = AI.leftTex;
 			AI.Pos[0] -= AI.speed;
+			AI.position = 0;
 			}
 		}
 		if(AI.Pos[1] < leader.getPos()[1])
@@ -32,11 +34,12 @@ public class AIcontroller {
 		}
 		
 	}
+	
 
 	private static boolean checkAiBounds(int[] Pos, Player player) {
 			
 			//x-bound
-			if((Pos[0] < player.getPos()[0]-50 || Pos[0] > player.getPos()[0]+player.getSize()[0]+20)){
+			if((Pos[0] < player.getPos()[0]-50 || Pos[0] > player.getPos()[0]+player.leftMove.curFrameSize[0]+20)){
 				
 				return true;
 			}

@@ -37,6 +37,14 @@ public class SpriteAnimationDef {
 		return frames[i].image;
 	}
 	
+	public void setFrameTime(float n)
+	{
+		for(int i = 0; i < frames.length; i++)
+		{
+			frames[i].frameTimeSecs = n;
+		}
+	}
+	
 	public String getAnimationName()
 	{
 		return name;

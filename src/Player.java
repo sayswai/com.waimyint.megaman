@@ -65,13 +65,17 @@ public class Player extends SpriteCharacter {
 	       
 		
 		}else{
-			if(isAimoving){
-			AIcontroller.move(this, leader);
-			}
+
 			if(Keyboard.getKbState()[KeyEvent.VK_N])
 			{isAimoving = true;}
 			if(Keyboard.getKbState()[KeyEvent.VK_M])
 			{isAimoving = false;}
+			
+			
+			if(isAimoving){
+			AIcontroller.move(this, leader);
+			}
+			
 		}
 	}
 	

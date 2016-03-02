@@ -1,3 +1,5 @@
+import com.jogamp.newt.event.KeyEvent;
+
 
 public class SpriteCharacter {
 
@@ -5,7 +7,7 @@ public class SpriteCharacter {
 	protected int[] Pos = new int[]{10, 10};
 	
 	/*Texture of Sprites*/
-	AnimationData idleLeft, idleRight, rightmove, leftMove;
+	AnimationData idleLeft, idleRight, rightMove, leftMove;
 	
 	/*Player Statistics*/
 	protected String name;
@@ -45,11 +47,13 @@ public class SpriteCharacter {
 					}
 					
 				curFrame = def.getFrameTex(counter);
+				curFrameSize = def.size;
 				secsUnitNextFrame = System.nanoTime();
 				}
 				
 				
 			}else{
+				this.counter = 0; this.direction = 0;
 				secsUnitNextFrame = System.nanoTime();
 				curFrame = def.getFrameTex(counter);
 				curFrameSize = def.size;
@@ -67,8 +71,17 @@ public class SpriteCharacter {
 		this.name = name;
 		this.speed = speed;
 		this.isAi = isAi;
+		
 		idleLeft = new AnimationData();
 		idleRight = new AnimationData();
+		rightMove = new AnimationData();
+		leftMove = new AnimationData();
+		
+		idleLeft.secsUnitNextFrame = 0;
+		idleRight.secsUnitNextFrame = 0;
+		rightMove.secsUnitNextFrame = 0;
+		leftMove.secsUnitNextFrame = 0;
+		
 		
 	}
 	/*
@@ -90,13 +103,29 @@ public class SpriteCharacter {
 	
 	public void draw()
 	{
-		if(position == 0)//left
-		{
-			idleLeft.draw();
+		if(!isAi){
+			if(position == 0 && Keyboard.getKbPrevState()[KeyEvent.VK_A])//left
+			{
+				leftMove.update();
+				leftMove.draw();
+			}else if(position == 1 && Keyboard.getKbPrevState()[KeyEvent.VK_D]){//right
+				rightMove.update();
+				rightMove.draw();
+			}else if(position == 0)
+			{
+				idleLeft.draw();
+			}else{
+				idleRight.draw();
+				
+			}
 		}else{
-			idleRight.draw();
+			if(position == 0)
+			{
+				TGAController.glDrawSprite(Window.gl, idleLeft.def.getFrameTex(0), Pos[0], Pos[1], idleLeft.def.size[0], idleLeft.def.size[1]);
+			}else{
+				TGAController.glDrawSprite(Window.gl, idleRight.def.getFrameTex(0), Pos[0], Pos[1], idleRight.def.size[0], idleRight.def.size[1]);
+			}
 		}
-		//TGAController.glDrawSprite(Window.gl, currentTex, Pos[0], Pos[1], Size[0]+10, Size[1]+10);
 	}
 	
 	protected static boolean inBounds(int nextx, int nexty, int xbound, int ybound){

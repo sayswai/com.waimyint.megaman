@@ -35,8 +35,8 @@ public class main {
     	
     	/*Load Textures*/
     	TextController.glWrite(Color.white, 0, spacing, "Initializing Textures...", font); spacing-=24;
-        one.loadTexture("right","Mega-Man-transparent.tga");
-        one.loadTexture("left","Mega-man-transparent-left.tga");
+        one.loadTexture("right","kirby2.tga");
+        one.loadTexture("left","kirby2left.tga");
         bot.loadTexture("right","petRight.tga");
         bot.loadTexture("left","petLeft.tga");
         bg.loadTexture("bg.tga");

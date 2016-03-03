@@ -12,7 +12,7 @@ public class SpriteAnimationDef {
 		public FrameDef(int tex)
 		{
 			image = tex;
-			frameTimeSecs = 199999999;
+			frameTimeSecs = 188888899;
 		}
 	}
 	

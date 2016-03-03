@@ -8,7 +8,7 @@ public class AIcontroller {
 			if(checkAiBounds(AI.Pos, leader)){
 			//AI.currentTex = AI.rightTex;
 			AI.Pos[0] += AI.speed;
-			AI.position = 1;
+			AI.direction = 1;
 			}
 		}
 		if(AI.Pos[0] > leader.getPos()[0])
@@ -17,7 +17,7 @@ public class AIcontroller {
 			{
 			//AI.currentTex = AI.leftTex;
 			AI.Pos[0] -= AI.speed;
-			AI.position = 0;
+			AI.direction = 0;
 			}
 		}
 		if(AI.Pos[1] < leader.getPos()[1])

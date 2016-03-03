@@ -11,42 +11,63 @@ public class Player extends SpriteCharacter {
 	{
 		super(name, speed, isAi);
 		
-		 /*Positioning Sprite to be in the middle*/
+		 /*Positioning Sprites Spawn point here*/
         Pos[0] = Window.window.getWidth()/2;
-        Pos[1] = Window.window.getHeight()/2;
+        Pos[1] = 380;
 	}
 	public Player(String name, int speed, boolean isAi, Player player)
 	{
 		super(name, speed, isAi);
 		
 		leader = player;
-		
-		Pos[0] = 0;
-		Pos[1] = 420;
+		 /*Positioning Sprites Spawn point here*/
+		Pos[0] = 60;
+		Pos[1] = 380;
 	}
 	
-	public void move()
+	public void update()
 	{
 		if(!isAi){
+			if(Keyboard.getKbPrevState()[KeyEvent.VK_ENTER])
+			{
+				noClip = true;
+			}
+			if(Keyboard.getKbPrevState()[KeyEvent.VK_BACK_SPACE])
+			{
+				if(Pos[1] <= 280)
+				{
+					Pos[1] = 300;
+				}
+				noClip = false;
+			}
 			if (Keyboard.getKbState()[KeyEvent.VK_A] && inBounds(Pos[0]-speed, Pos[1], Window.window.getWidth(), Window.window.getHeight())) {//left
 	            Pos[0] -= speed;
-	            position = 0;
+	            Camera.spriteX -= speed;
+	            direction = 0;
 	       }
 	
 	       if (Keyboard.getKbState()[KeyEvent.VK_D] && inBounds(Pos[0]+speed, Pos[1], Window.window.getWidth(), Window.window.getHeight())) {//right
 	       	  Pos[0] += speed;
-	       	  position = 1;
+			  Camera.spriteX += speed;
+	       	  direction = 1;
 	       }
 	
 	       if (Keyboard.getKbState()[KeyEvent.VK_W] && inBounds(Pos[0], Pos[1]-speed, Window.window.getWidth(), Window.window.getHeight())) {//up
-	           Pos[1] -= speed;
+	          if(!noClip){
+	    	   if (Pos[1] > 280)
+	        	  Pos[1] -= speed;
+	          }else{
+	        	  Pos[1] -= speed;
+	          }
+	          
 	       }
 	
 	       if (Keyboard.getKbState()[KeyEvent.VK_S] && inBounds(Pos[0], Pos[1]+speed, Window.window.getWidth(), Window.window.getHeight()-10)) {//down
 	           Pos[1] += speed;
 	       }
 	       idleLeft.update(); idleRight.update();
-	       
+	       //System.out.println("X: " +Pos[0]+ " Y: "+Pos[1]);
+	              
 	       /*
 	       if(inJump)
 	       {
@@ -102,6 +123,14 @@ public class Player extends SpriteCharacter {
 			jumpVal = 0;
 		}
 	}
+	public int getX() {
+		return Pos[0];
+	}
+	public int getY(){
+		return Pos[1];
+	}
+	
+	
 	
 	
 }

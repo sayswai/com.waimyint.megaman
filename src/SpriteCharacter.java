@@ -16,9 +16,10 @@ public class SpriteCharacter {
 	protected boolean isAimoving = false;
 	protected boolean inJump = false;
 	protected boolean beginJump = false;
+	protected boolean noClip = false;
 	protected boolean endJump = false;
 	protected int	jumpVal = 0;
-	protected int position = 0; //0 = left, 1 = right
+	protected int direction = 0; //0 = left, 1 = right
 	
 	
 	class AnimationData{
@@ -104,14 +105,14 @@ public class SpriteCharacter {
 	public void draw()
 	{
 		if(!isAi){
-			if(position == 0 && Keyboard.getKbPrevState()[KeyEvent.VK_A])//left
+			if(direction == 0 && Keyboard.getKbPrevState()[KeyEvent.VK_A])//left
 			{
 				leftMove.update();
 				leftMove.draw();
-			}else if(position == 1 && Keyboard.getKbPrevState()[KeyEvent.VK_D]){//right
+			}else if(direction == 1 && Keyboard.getKbPrevState()[KeyEvent.VK_D]){//right
 				rightMove.update();
 				rightMove.draw();
-			}else if(position == 0)
+			}else if(direction == 0)
 			{
 				idleLeft.draw();
 			}else{
@@ -119,7 +120,7 @@ public class SpriteCharacter {
 				
 			}
 		}else{
-			if(position == 0)
+			if(direction == 0)
 			{
 				TGAController.glDrawSprite(Window.gl, idleLeft.def.getFrameTex(0), Pos[0], Pos[1], idleLeft.def.size[0], idleLeft.def.size[1]);
 			}else{
@@ -129,7 +130,7 @@ public class SpriteCharacter {
 	}
 	
 	protected static boolean inBounds(int nextx, int nexty, int xbound, int ybound){
-    	if(nextx >= 1 && nextx <= xbound-35 && nexty >= 1 && nexty <= ybound-45){
+    	if(nextx >= 1 && nextx <= xbound-60 && nexty >= 1 && nexty <= ybound-45){
     		return true;
     	}
     	return false;
@@ -151,6 +152,11 @@ public class SpriteCharacter {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+	public void setX(int x) {
+		Pos[0] = x;
+	}
+	public int getSpeed() {
+		return speed;
+	}
 	
 }

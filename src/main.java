@@ -24,17 +24,18 @@ public class main {
     	
     	/*Initialize Objects*/
     	TextController.glWrite(Color.white, 0, spacing, "Initializing Objects..", font); spacing-=24;
-    	Player one = new Player("Mega", 5, false);
+    	Player one = new Player("Mega", 3, false);
     	Player bot = new Player("Pet", 4, true, one);
-    	Background bg = new Background();
-    	TileBG tiles = new TileBG(1);
+    	Level map = new Level(1);
     	
     	/*Initialize Text*/
     	TextController.glWrite(Color.white, 0, spacing, "Initializing Texts..", font); spacing-=24;
-    	Text AiOn = new Text("AI ON"); AiOn.setColor(Color.green); AiOn.setY(480-52);
-    	Text AiOff = new Text("AI OFF"); AiOff.setColor(Color.red); AiOff.setY(480-52);
-    	Text AiSwitch = new Text("N to turn ON | M to turn OFF"); AiSwitch.setColor(Color.white); AiSwitch.setY(480-64);
-    	
+    	Text AiOn = new Text("AI ON"); AiOn.setColor(Color.green); AiOn.setY(480-28);
+    	Text AiOff = new Text("AI OFF"); AiOff.setColor(Color.red); AiOff.setY(480-28);
+    	Text AiSwitch = new Text("N to turn ON | M to turn OFF"); AiSwitch.setColor(Color.white); AiSwitch.setY(480-40);
+    	Text noClipOn = new Text("Clip ON"); noClipOn.setColor(Color.green); noClipOn.setY(480-52);
+    	Text noClipOff = new Text("Clip OFF"); noClipOff.setColor(Color.red); noClipOff.setY(480-52);
+    	Text noClipSwitch = new Text("ENTER to turn off clip | BACKSPACE to turn on clip"); noClipSwitch.setColor(Color.white); noClipSwitch.setY(480-64);
     
     	
     	/*Load Textures*/
@@ -63,10 +64,8 @@ public class main {
     	bot.idleLeft.def = botIdleLeft; 
     	bot.idleRight.def = botIdleRight; 
 
-        bg.loadTexture("bg.tga");
         
-        
-        
+        Camera.initialize(one, map);
         
         
 
@@ -90,15 +89,17 @@ public class main {
                 shouldExit = true;
             }
             
-            one.move();
-            bot.move();
+
+            one.update();
+            bot.update();
+            Camera.update(one, map);
+            
             
             /*Clear Past*/
             Window.clearWindow();
             
             /*Draw present*/
-            bg.draw();
-            tiles.draw();
+            map.draw();
             
             if(bot.isAimoving)
             {
@@ -106,6 +107,14 @@ public class main {
             }else{
             	AiOff.draw();
             }
+            
+            if(!one.noClip)
+            {
+            	noClipOn.draw();
+            }else{
+            	noClipOff.draw();
+            }
+            noClipSwitch.draw();
             AiSwitch.draw();
            
             one.draw();

@@ -1,5 +1,4 @@
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
+
 
 
 public class TileBG {
@@ -89,15 +88,23 @@ public class TileBG {
 	{
 		for(int y = 0; y < maxTilesY; y++)
 		{
+			/*
+			 * Camera.minbgX & Camera.maxbgX is what keeps
+			 * sprites that are not suppose to be on screen to not be
+			 * drawn and ONLY what's on the screen to be drawn.
+			 * 
+			 * Optimization implemented differently than taught..
+			 * unsure if this is valid?
+			 */
 			for(int x = Camera.minbgX; x < Camera.maxbgX; x++)
-			//for(int x = 16; x < maxTilesX; x++)
+			//for(int x = 31; x < 31+16; x++)
 			{
 				/*
 				if(tile.getTile(x, y) == floorTex || tile.getTile(x, y) == ceilingTex)
 				TGAController.glDrawSprite(Window.gl, tile.getTile(x, y), x*40, y*40, tileWidth, tileHeight);
 				*/
-				TGAController.glDrawSprite(Window.gl, tile.getTile(x, y), ( x - (Camera.deltaXtiles))*40, y*40, tileSize[0], tileSize[1]);
-				//TGAController.glDrawSprite(Window.gl, tile.getTile(x, y), (x-16)*40, y*40, tileSize[0], tileSize[1]);
+				TGAController.glDrawSprite(Window.gl, tile.getTile(x, y), ( x - (Camera.minbgX))*40, y*40, tileSize[0], tileSize[1]);
+				//TGAController.glDrawSprite(Window.gl, tile.getTile(x, y), (x-31)*40, y*40, tileSize[0], tileSize[1]);
 			}
 		}
 	}

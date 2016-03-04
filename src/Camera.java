@@ -3,7 +3,7 @@ import com.jogamp.newt.event.KeyEvent;
 
 public class Camera {
 
-	private int currentBG;
+	//private int currentBG;
 	static int started = 0;
 	static int scrolling = 0;
 	static int spriteXrelWindow = 0;
@@ -31,6 +31,10 @@ public class Camera {
 	{
 		if(started != 0)
 		{
+			if(Keyboard.getKbPrevState()[KeyEvent.VK_RIGHT]){
+				
+			}else if(Keyboard.getKbPrevState()[KeyEvent.VK_LEFT]){
+			}
 			if(Keyboard.getKbState()[KeyEvent.VK_D]){
 				updateRight(player, level);
 			}else if(Keyboard.getKbState()[KeyEvent.VK_A]){
@@ -48,10 +52,16 @@ public class Camera {
 			updateDelta(0, player, level);
 			
 				if(deltaXtiles >= 0){
-					minbgX = deltaXtiles;
-					maxbgX = deltaXtiles + (Window.window.getWidth() / (level.getCurrentLevel().getTileWidth()));
-					
-					player.setX((spriteX-deltaXpixels)+40);
+					int comp = level.getMaxTilesX() - (Window.window.getWidth()/level.getTileWidth());
+					if(deltaXtiles < comp){
+						minbgX = deltaXtiles;
+						maxbgX = deltaXtiles + (Window.window.getWidth() / (level.getCurrentLevel().getTileWidth()));
+						
+						player.setX((spriteX-deltaXpixels)+40);
+					}else{//reaches the end of the map, do not change minbgx anymore & let player move freely
+							minbgX = comp;
+							maxbgX = comp*2;
+					}
 					if(deltaXtiles == 0)//stops the world from scrolling 
 					{
 						scrolling = 0;
@@ -70,17 +80,23 @@ public class Camera {
 			updateDelta(1, player, level);
 			scrolling = 1;
 		}else if(player.getX() > (Window.window.getWidth() * .70) && scrolling == 1){
-			if(deltaXtiles < level.getMaxTilesX())
+			if(deltaXtiles < level.getMaxTilesX() && deltaXpixels < Window.window.getWidth())//this check prevents deltaXpixels to keep updating once it's the end of the map
 			{
 				updateDelta(1, player, level);
 			}
 		}
 		
 		if(deltaXtiles > 0){
-			minbgX = deltaXtiles;
-			maxbgX = deltaXtiles + (Window.window.getWidth() / (level.getCurrentLevel().getTileWidth()));
-			
-			player.setX((spriteX-deltaXpixels)+40);
+			int comp = level.getMaxTilesX() - (Window.window.getWidth()/level.getTileWidth());
+			if(deltaXtiles < comp){
+				minbgX = deltaXtiles;
+				maxbgX = deltaXtiles + (Window.window.getWidth() / (level.getCurrentLevel().getTileWidth()));
+				
+				player.setX((spriteX-deltaXpixels)+40);
+			}else{//reaches the end of the map, do not change minbgx anymore & let player move freely
+					minbgX = comp;
+					maxbgX = comp*2;
+				}
 			}
 	}
 
@@ -90,9 +106,10 @@ public class Camera {
 		}else{
 			deltaXpixels -= player.getSpeed();
 		}
+
+			deltaXtiles = deltaXpixels / (level.getCurrentLevel().getTileWidth());
 		
-		deltaXtiles = deltaXpixels / (level.getCurrentLevel().getTileWidth());
-		System.out.println("deltaXTiles: " +deltaXtiles+" minbgX: "+minbgX);
+		System.out.println("deltaXTiles: " +deltaXtiles+" minbgX: "+minbgX+" deltaXpixels: "+deltaXpixels);
 	}
 	
 	

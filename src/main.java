@@ -91,9 +91,9 @@ public class main {
             
 
             one.update();
-            bot.update();
             Camera.update(one, map);
-            
+
+            bot.update();
             
             /*Clear Past*/
             Window.clearWindow();

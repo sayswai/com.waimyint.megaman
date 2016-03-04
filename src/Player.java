@@ -100,6 +100,7 @@ public class Player extends SpriteCharacter {
 		}
 	}
 	
+	/*
 	private void jump()
 	{
 		if((jumpVal <= speed+20) && beginJump)
@@ -122,13 +123,14 @@ public class Player extends SpriteCharacter {
 			endJump = false;
 			jumpVal = 0;
 		}
-	}
+	}*/
 	public int getX() {
 		return Pos[0];
 	}
 	public int getY(){
 		return Pos[1];
 	}
+	
 	
 	
 	

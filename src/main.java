@@ -91,9 +91,9 @@ public class main {
             
 
             one.update();
-            Camera.update(one, map);
+            //Camera.update(one, map);
 
-            bot.update();
+            //bot.update();
             
             /*Clear Past*/
             Window.clearWindow();
@@ -117,8 +117,8 @@ public class main {
             noClipSwitch.draw();
             AiSwitch.draw();
            
-            one.draw();
-            bot.draw();
+             one.draw();
+             bot.draw();
             
            
            

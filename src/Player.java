@@ -40,31 +40,38 @@ public class Player extends SpriteCharacter {
 				}
 				noClip = false;
 			}
-			if (Keyboard.getKbState()[KeyEvent.VK_A] && inBounds(Pos[0]-speed, Pos[1], Window.window.getWidth(), Window.window.getHeight())) {//left
-	            Pos[0] -= speed;
+			//if (Keyboard.getKbState()[KeyEvent.VK_A] && inBounds(Pos[0]-speed, Pos[1], Window.window.getWidth(), Window.window.getHeight())) {//left
+			if (Keyboard.getKbState()[KeyEvent.VK_A]){
+					Pos[0] -= speed;
+	            CameraTest.x -= speed;
+	            
 	            Camera.spriteX -= speed;
 	            direction = 0;
 	       }
 	
 	       if (Keyboard.getKbState()[KeyEvent.VK_D] && inBounds(Pos[0]+speed, Pos[1], Window.window.getWidth(), Window.window.getHeight())) {//right
 	       	  Pos[0] += speed;
+	       	  CameraTest.x += speed;
 			  Camera.spriteX += speed;
 	       	  direction = 1;
 	       }
 	
 	       if (Keyboard.getKbState()[KeyEvent.VK_W] && inBounds(Pos[0], Pos[1]-speed, Window.window.getWidth(), Window.window.getHeight())) {//up
-	          if(!noClip){
-	    	   if (Pos[1] > 280)
-	        	  Pos[1] -= speed;
-	          }else{
-	        	  Pos[1] -= speed;
-	          }
+	    	  Pos[1] -= speed;
+	          CameraTest.y -= speed;
 	          
 	       }
-	
 	       if (Keyboard.getKbState()[KeyEvent.VK_S] && inBounds(Pos[0], Pos[1]+speed, Window.window.getWidth(), Window.window.getHeight()-10)) {//down
 	           Pos[1] += speed;
+	           CameraTest.y += speed;
 	       }
+	       rPos[0] = Pos[0] - CameraTest.x;
+	       rPos[1] = Pos[1] - CameraTest.y;
+	       
+	       System.out.println("rPosX: "+rPos[0]+" S.X: "+Pos[0]+" C.X: "+CameraTest.x);
+	       //System.out.println("rPoY: "+rPos[1] +" S.Y: "+Pos[1]+" C.Y: "+CameraTest.y);
+	       
+	       
 	       idleLeft.update(); idleRight.update();
 	       //System.out.println("X: " +Pos[0]+ " Y: "+Pos[1]);
 	              

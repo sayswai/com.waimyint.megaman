@@ -5,6 +5,8 @@ public class SpriteCharacter {
 
 	/*Position of sprite (x, y)*/
 	protected int[] Pos = new int[]{10, 10};
+	/*Position of sprite relative to Camera*/
+	protected int[] rPos = new int[]{3, 3};
 	
 	/*Texture of Sprites*/
 	AnimationData idleLeft, idleRight, rightMove, leftMove;
@@ -63,14 +65,15 @@ public class SpriteCharacter {
 		
 		void draw()
 		{
-			TGAController.glDrawSprite(Window.gl, curFrame, Pos[0], Pos[1], curFrameSize[0]+10, curFrameSize[1]+10);
+			TGAController.glDrawSprite(Window.gl, curFrame, rPos[0], rPos[1], curFrameSize[0]+10, curFrameSize[1]+10);
+			//TGAController.glDrawSprite(Window.gl, curFrame, Pos[0], Pos[1], curFrameSize[0]+10, curFrameSize[1]+10);
 		}
 	}
 	
 	public SpriteCharacter(String name, int speed, boolean isAi)
 	{
 		this.name = name;
-		this.speed = speed;
+		this.speed = speed; CameraTest.movingSpeed = this.speed;
 		this.isAi = isAi;
 		
 		idleLeft = new AnimationData();
@@ -158,5 +161,12 @@ public class SpriteCharacter {
 	public int getSpeed() {
 		return speed;
 	}
+
+	public void setSpeed(int speed) {
+		this.speed = speed;
+		CameraTest.movingSpeed = this.speed;
+	}
+	
+	
 	
 }

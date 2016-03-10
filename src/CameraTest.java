@@ -1,0 +1,15 @@
+import java.awt.event.KeyEvent;
+
+
+public class CameraTest {
+
+	public static int x = 0;
+	public static int y = 0;
+	public static int xOffset = 0;	
+	public static int movingSpeed = 0;
+	
+	public static void updateOffset(int tileWidth) {
+		xOffset = x % tileWidth;
+	}
+	
+}

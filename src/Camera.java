@@ -7,7 +7,7 @@ public class Camera {
 	static int started = 0;
 	static int scrolling = 0;
 	static int spriteXrelWindow = 0;
-	static int spriteX = 0; // sprite x relative to window
+	static int spriteX = 0; 
 	//static int spriteY = 0;
 	static int minbgX = 0;
 	static int maxbgX = 0;
@@ -40,6 +40,7 @@ public class Camera {
 			}else if(Keyboard.getKbState()[KeyEvent.VK_A]){
 				updateLeft(player, level);
 			}
+			//System.out.println("spriteX relative to window: "+player.getX()+ " Actual spriteX:  "+spriteX);
 			
 		}else{
 			initialize(player, level);
@@ -61,6 +62,8 @@ public class Camera {
 					}else{//reaches the end of the map, do not change minbgx anymore & let player move freely
 							minbgX = comp;
 							maxbgX = comp*2;
+							
+							System.out.println("reached the end of the left side of the map");
 					}
 					if(deltaXtiles == 0)//stops the world from scrolling 
 					{
@@ -83,6 +86,9 @@ public class Camera {
 			if(deltaXtiles < level.getMaxTilesX() && deltaXpixels < Window.window.getWidth())//this check prevents deltaXpixels to keep updating once it's the end of the map
 			{
 				updateDelta(1, player, level);
+			}else if(deltaXpixels > Window.window.getWidth())
+			{
+				System.out.println("reached the right end of the map");
 			}
 		}
 		
@@ -109,7 +115,7 @@ public class Camera {
 
 			deltaXtiles = deltaXpixels / (level.getCurrentLevel().getTileWidth());
 		
-		System.out.println("deltaXTiles: " +deltaXtiles+" minbgX: "+minbgX+" deltaXpixels: "+deltaXpixels);
+		//System.out.println("deltaXTiles: " +deltaXtiles+" minbgX: "+minbgX+" deltaXpixels: "+deltaXpixels);
 	}
 	
 	

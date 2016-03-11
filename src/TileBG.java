@@ -105,10 +105,10 @@ public class TileBG {
 		{
 			int startingXpos;
 			int loopStart;
-			if(CameraTest.x > 0){
-				CameraTest.updateOffset(tileWidth);
-				startingXpos = -(CameraTest.xOffset);
-				loopStart = Math.floorDiv(CameraTest.x - CameraTest.xOffset, tileWidth);
+			if(Camera.x > 0){
+				Camera.updateOffset(tileWidth);
+				startingXpos = -(Camera.xOffset);
+				loopStart = Math.floorDiv(Camera.x - Camera.xOffset, tileWidth);
 			}else{
 				startingXpos = 0;
 				loopStart = 0;

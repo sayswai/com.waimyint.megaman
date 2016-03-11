@@ -21,13 +21,10 @@ import com.jogamp.opengl.GL2;
 	// Load a file into an OpenGL texture and return that texture.
 
 
-import java.io.DataInputStream;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.ByteBuffer;
 
-import com.jogamp.opengl.GL2;
 
 
 public class TGAController{

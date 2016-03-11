@@ -63,9 +63,9 @@ public class main {
     	
     	bot.idleLeft.def = botIdleLeft; 
     	bot.idleRight.def = botIdleRight; 
-
-        
-        Camera.initialize(one, map);
+    	
+    	/*Physics Implementation*/
+    	
         
         
 
@@ -91,7 +91,6 @@ public class main {
             
 
             one.update();
-            //Camera.update(one, map);
 
             //bot.update();
             
@@ -115,10 +114,10 @@ public class main {
             	noClipOff.draw();
             }
             noClipSwitch.draw();
-            AiSwitch.draw();
+           // AiSwitch.draw();
            
              one.draw();
-             bot.draw();
+             //bot.draw();
             
            
            

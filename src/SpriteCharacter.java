@@ -73,7 +73,7 @@ public class SpriteCharacter {
 	public SpriteCharacter(String name, int speed, boolean isAi)
 	{
 		this.name = name;
-		this.speed = speed; CameraTest.movingSpeed = this.speed;
+		this.speed = speed; Camera.movingSpeed = this.speed;
 		this.isAi = isAi;
 		
 		idleLeft = new AnimationData();
@@ -164,7 +164,7 @@ public class SpriteCharacter {
 
 	public void setSpeed(int speed) {
 		this.speed = speed;
-		CameraTest.movingSpeed = this.speed;
+		Camera.movingSpeed = this.speed;
 	}
 	
 	

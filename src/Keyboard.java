@@ -1,8 +1,5 @@
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
-import com.jogamp.newt.opengl.GLWindow;
-import com.jogamp.opengl.GL2;
-
 
 public class Keyboard {
 

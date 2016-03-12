@@ -1,3 +1,5 @@
+import java.awt.Shape;
+
 
 public class Tiles {
 
@@ -8,6 +10,8 @@ public class Tiles {
 	private int maxY;
 	private int[] tiles;
 	private int totalTiles;
+	
+	private Shape shape;
 	
 	public Tiles (int maxX, int maxY, int width, int height)
 	{

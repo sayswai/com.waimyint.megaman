@@ -49,4 +49,12 @@ public class SpriteAnimationDef {
 	{
 		return name;
 	}
+
+	public int getX() {
+		return size[0];
+	}
+
+	public int getY() {
+		return size[1];
+	}
 }

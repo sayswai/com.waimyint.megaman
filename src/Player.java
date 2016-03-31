@@ -139,8 +139,7 @@ public class Player extends SpriteCharacter {
 			shape.move(getX(), getY());
 			shape.resize(getWidth(), getHeight());
 		
-			
-			
+
 	       /*Updates onScreen boolean to make sure things off screen aren't being drawn*/
 	       if(rPos[0] >= 0 && rPos[0] <= Window.window.getWidth())
 	       {

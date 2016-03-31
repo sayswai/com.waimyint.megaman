@@ -53,6 +53,10 @@ public class Level {
 	{
 		return levels[currentLevel].getTileWidth();
 	}
+
+	public int getTileHeight() {
+		return levels[currentLevel].getTileHeight();
+	}
 	
 	
 	

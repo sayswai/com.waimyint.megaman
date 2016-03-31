@@ -9,6 +9,7 @@ public class Tiles {
 	private int maxX;
 	private int maxY;
 	private int[] tiles;
+	private int[] physics;
 	private int totalTiles;
 	
 	private Shape shape;
@@ -19,6 +20,8 @@ public class Tiles {
 		this.maxX = maxX; this.maxY = maxY;
 		tiles = new int[maxY * width + maxX];
 		this.totalTiles = tiles.length;
+		
+		physics = new int[totalTiles];
 	}
 	
 	public int getTile(int x, int y)
@@ -41,6 +44,11 @@ public class Tiles {
 		tiles[y*width + x] = tex;
 	}
 	
+	public void setPhysics(int x, int y, int value)
+	{
+		physics[y*width + x] = value;
+	}
+	
 	public int totalTiles()
 	{
 		return totalTiles;
@@ -60,6 +68,10 @@ public class Tiles {
 
 	public void setMaxY(int maxY) {
 		this.maxY = maxY;
+	}
+
+	public int getPhysics(int x, int y) {
+		return physics[y*width + x];
 	}
 	
 	

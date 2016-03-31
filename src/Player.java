@@ -1,4 +1,6 @@
 
+import java.awt.Rectangle;
+
 import com.jogamp.newt.event.KeyEvent;
 
 
@@ -29,7 +31,9 @@ public class Player extends SpriteCharacter {
 	public void updateMovement()
 	{
 		if(!isAi){
-
+			prevPos[0] = Pos[0];
+			prevPos[1] = Pos[1];
+			
 			if(Keyboard.getKbPrevState()[KeyEvent.VK_ENTER])
 			{
 				noClip = true;
@@ -43,7 +47,7 @@ public class Player extends SpriteCharacter {
 				noClip = false;
 			}
 
-			if (Keyboard.getKbState()[KeyEvent.VK_A]){
+			if (Keyboard.getKbState()[KeyEvent.VK_A]){//left
 					Pos[0] -= speed;
 					if(Pos[0] < (Window.window.getWidth() * 1.50)){
 					/*
@@ -86,12 +90,10 @@ public class Player extends SpriteCharacter {
 	           //CameraTest.y += speed;
 	       }
 	       
-	       rPos[0] = Pos[0] - Camera.x;
-	       rPos[1] = Pos[1] - Camera.y;
+	       updaterPos();
 	       idleLeft.update(); idleRight.update();
 	     }else{
-		       rPos[0] = Pos[0] - Camera.x;
-		       rPos[1] = Pos[1] - Camera.y;
+		       updaterPos();
 		       idleTex.update();
 		       curr = idleTex;
 				
@@ -191,6 +193,11 @@ public class Player extends SpriteCharacter {
 	public void setLeader(Player leader) {
 		this.leader = leader;
 	}
+	public void updaterPos()
+	{
+		 rPos[0] = Pos[0] - Camera.x;
+	     rPos[1] = Pos[1] - Camera.y;
+	}
 	public void updateProjectiles() {
 		for(int i = 0 ; i < projectiles.length; i++)
 		{
@@ -227,6 +234,12 @@ public class Player extends SpriteCharacter {
 			leader.health -= 2;
 			projectiles[0].targetHit = false;
 		}
+	}
+	public void collisionCheck(Level map) {
+		int[] topLeftTile = new int[2];
+		int[] topRightTile = new int[2];
+		int[] bottomLeftTile = new int[2];
+		int[] bottomRightTile = new int[2];
 	}
 	
 }

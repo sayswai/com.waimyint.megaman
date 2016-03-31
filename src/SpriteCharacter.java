@@ -6,6 +6,7 @@ import com.jogamp.newt.event.KeyEvent;
 public class SpriteCharacter {
 
 	/*Position of sprite (x, y)*/
+	protected int[] prevPos = new int[]{0, 0};
 	protected int[] Pos = new int[]{10, 10};
 	/*Position of sprite relative to Camera*/
 	protected int[] rPos = new int[]{3, 3};

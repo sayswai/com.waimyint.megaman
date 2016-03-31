@@ -156,6 +156,7 @@ public class main {
             	boo.updateProjectiles();
             	Camera.boundaryUpdate();
             	one.boundaryCheck();
+            	one.collisionCheck(map);//later change map to a variable that points to current map
             	boo.boundaryCheck();
             	boo.projectileCollision();
             	lastPhysicsFrameMS += physicsDeltaMs;

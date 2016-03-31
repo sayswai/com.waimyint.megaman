@@ -27,8 +27,7 @@ public class TileBG {
 		loadClouds();
 		loadCeiling();
 		loadFloor();
-		
-		
+		loadBricks();
 	}
 
 	private void loadClouds() {
@@ -63,6 +62,7 @@ public class TileBG {
 			for(int j = 0; j < maxTilesX; j++)
 			{
 				tile.setTile(j, i, bgColorTex);
+				tile.setPhysics(j, i, 0);
 			}
 		}
 	}
@@ -82,6 +82,38 @@ public class TileBG {
 			}
 		}
 		
+	}
+	
+	private void loadBricks(){
+		int bricks = TGAController.glTexImageTGAFile(Window.gl, "brick.tga", tileSize);
+		
+		for(int i = (maxTilesY - 4); i < maxTilesY-2; i++)
+		{
+			tile.setTile(7, i, bricks);
+			tile.setPhysics(7, i, 1);
+		}
+		for(int i = 4; i < 7; i++)
+		{
+			tile.setTile(i, maxTilesY-3, bricks);
+			tile.setPhysics(i, maxTilesY-3, 1);
+		}
+		for(int i = (maxTilesY -2); i < maxTilesY; i++)
+		{
+			tile.setTile(11, i, bricks);
+			tile.setPhysics(11, i, 1);
+		}
+		
+		for(int i = 15; i < 19; i++)
+		{
+			tile.setTile(i, maxTilesY-3, bricks);
+			tile.setPhysics(i, maxTilesY-3, 1);
+		}
+		
+		for(int i = maxTilesY-3; i < maxTilesY; i++)
+		{
+			tile.setTile(18, i, bricks);
+			tile.setPhysics(18, i, 1);
+		}
 	}
 	
 	/*
@@ -147,6 +179,10 @@ public class TileBG {
 		return tile.getTile(x, y);
 	}
 	
+	public int getTilePhysics(int x, int y)
+	{
+		return tile.getPhysics(x, y);
+	}
 	public Tiles getTile()
 	{
 		return tile;

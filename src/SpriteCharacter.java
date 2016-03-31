@@ -1,3 +1,5 @@
+import java.awt.Rectangle;
+
 import com.jogamp.newt.event.KeyEvent;
 
 
@@ -9,20 +11,28 @@ public class SpriteCharacter {
 	protected int[] rPos = new int[]{3, 3};
 	
 	/*Texture of Sprites*/
-	AnimationData idleLeft, idleRight, rightMove, leftMove;
+	AnimationData idleLeft, idleRight, rightMove, leftMove, idleTex;
+	AnimationData curr;
+	
+	/*Shape*/
+	protected Rectangle shape; 
 	
 	/*Player Statistics*/
 	protected String name;
 	protected int speed;
 	protected boolean isAi = false;
 	protected boolean isAimoving = false;
+	protected boolean onScreen = true;
 	protected boolean inJump = false;
 	protected boolean beginJump = false;
 	protected boolean noClip = false;
 	protected boolean endJump = false;
 	protected int	jumpVal = 0;
 	protected int direction = 0; //0 = left, 1 = right
+	protected int health;
 	
+	/*Player's Various Weapons*/
+	protected Projectile[] projectiles;
 	
 	class AnimationData{
 		SpriteAnimationDef def;
@@ -36,6 +46,7 @@ public class SpriteCharacter {
 			{
 				float delta = System.nanoTime() - secsUnitNextFrame;
 				if(delta>=def.getFrameTime(counter)){
+					/*
 					if(direction == 0 && counter == def.frames.length-1)//counting up and hit the right end of the frames
 					{
 						direction = 1; //count down
@@ -47,8 +58,13 @@ public class SpriteCharacter {
 						counter++;
 					}else if(direction == 1){//counting down
 						counter--;
+					}*/
+					if(counter == def.frames.length-1)
+					{
+						counter = 0;
+					}else{
+						counter++;
 					}
-					
 				curFrame = def.getFrameTex(counter);
 				curFrameSize = def.size;
 				secsUnitNextFrame = System.nanoTime();
@@ -75,18 +91,22 @@ public class SpriteCharacter {
 		this.name = name;
 		this.speed = speed; Camera.movingSpeed = this.speed;
 		this.isAi = isAi;
+		this.health = 100;
 		
 		idleLeft = new AnimationData();
 		idleRight = new AnimationData();
 		rightMove = new AnimationData();
 		leftMove = new AnimationData();
+		idleTex = new AnimationData();
+		curr = idleLeft;
 		
 		idleLeft.secsUnitNextFrame = 0;
 		idleRight.secsUnitNextFrame = 0;
 		rightMove.secsUnitNextFrame = 0;
 		leftMove.secsUnitNextFrame = 0;
+		idleTex.secsUnitNextFrame = 0;
 		
-		
+		shape = new Rectangle(getX(), getY(), getWidth(), getHeight());
 	}
 	/*
 	public void loadTexture(String direction, String texture)
@@ -107,38 +127,122 @@ public class SpriteCharacter {
 	
 	public void draw()
 	{
-		if(!isAi){
-			if(direction == 0 && Keyboard.getKbPrevState()[KeyEvent.VK_A])//left
-			{
-				leftMove.update();
-				leftMove.draw();
-			}else if(direction == 1 && Keyboard.getKbPrevState()[KeyEvent.VK_D]){//right
-				rightMove.update();
-				rightMove.draw();
-			}else if(direction == 0)
-			{
-				idleLeft.draw();
+		if(onScreen){//only draws if on screen
+			if(!isAi){
+				if(direction == 0 && Keyboard.getKbPrevState()[KeyEvent.VK_A])//left
+				{
+					leftMove.update();
+					leftMove.draw();
+				}else if(direction == 1 && Keyboard.getKbPrevState()[KeyEvent.VK_D]){//right
+					rightMove.update();
+					rightMove.draw();
+				}else if(direction == 0)
+				{
+					idleLeft.draw();
+					curr = idleLeft;
+				}else{
+					idleRight.draw();
+					curr = idleRight;
+					
+				}
 			}else{
-				idleRight.draw();
 				
-			}
-		}else{
-			if(direction == 0)
-			{
-				TGAController.glDrawSprite(Window.gl, idleLeft.def.getFrameTex(0), Pos[0], Pos[1], idleLeft.def.size[0], idleLeft.def.size[1]);
-			}else{
-				TGAController.glDrawSprite(Window.gl, idleRight.def.getFrameTex(0), Pos[0], Pos[1], idleRight.def.size[0], idleRight.def.size[1]);
+					idleTex.draw();
+				if(projectiles.length > 0)
+				{
+					for(int i = 0; i < projectiles.length; i++)
+					{
+						projectiles[i].draw();
+					}
+				}
 			}
 		}
 	}
 	
-	protected static boolean inBounds(int nextx, int nexty, int xbound, int ybound){
-    	if(nextx >= 1 && nextx <= xbound-60 && nexty >= 1 && nexty <= ybound-45){
-    		return true;
-    	}
-    	return false;
-    }
-
+	public void collisionResolution(Player boo) {
+	}
+	
+	public void addProjectile(Projectile...args) {
+		if(projectiles == null)
+		{
+			projectiles = new Projectile[args.length];
+			for(int i = 0; i < projectiles.length; i++)
+			{
+				projectiles[i] = args[i];
+			}
+		}else{
+			int length = projectiles.length + args.length;
+			Projectile[] recent = new Projectile[length];
+			for(int i = 0; i < projectiles.length; i++)//copy old projectiles into new array
+			{
+				recent[i] = projectiles[i];
+			}
+			for(int i = projectiles.length; i < recent.length; i++)//copy projectiles passed in arg. into new array
+			{
+				recent[i] = args[i-projectiles.length];
+			}
+			projectiles = new Projectile[length];
+			for(int i = 0 ; i < projectiles.length; i++)
+			{
+				projectiles[i] = recent[i];
+			}
+		}
+		
+	}
+	
+	public boolean overlap(Player player)
+	{//using AABB check
+		Rectangle s = player.shape;
+		boolean retrn = true;
+		//is box1 left of box 2
+		if((shape.x+shape.width) < s.x)
+		{
+			retrn = false;
+		}
+		//is box1 right of box 2
+		if(shape.x > (s.x+s.width))
+		{
+			retrn = false;
+		}
+		//is box1 above box2
+		if((shape.y+shape.height) < s.y)
+		{
+			retrn = false;
+		}
+		//is box1 below box2
+		if(shape.y > (s.y+s.height))
+		{
+			retrn = false;
+		}
+		return retrn;
+	}
+	
+	public boolean overlap(Rectangle s)
+	{//using AABB check
+		boolean retrn = true;
+		//is box1 left of box 2
+		if((shape.x+shape.width) < s.x)
+		{
+			retrn = false;
+		}
+		//is box1 right of box 2
+		if(shape.x > (s.x+s.width))
+		{
+			retrn = false;
+		}
+		//is box1 above box2
+		if((shape.y+shape.height) < s.y)
+		{
+			retrn = false;
+		}
+		//is box1 below box2
+		if(shape.y > (s.y+s.height))
+		{
+			retrn = false;
+		}
+		return retrn;
+	}
+	
 	public int[] getPos() {
 		return Pos;
 	}
@@ -158,6 +262,25 @@ public class SpriteCharacter {
 	public void setX(int x) {
 		Pos[0] = x;
 	}
+	public void setY(int y){
+		Pos[1] = y;
+	}
+	public int getX()
+	{
+		return Pos[0];
+	}
+	public int getY()
+	{
+		return Pos[1];
+	}
+	public int getWidth()
+	{
+		return curr.curFrameSize[0];
+	}
+	public int getHeight()
+	{
+		return curr.curFrameSize[1];
+	}
 	public int getSpeed() {
 		return speed;
 	}
@@ -165,6 +288,14 @@ public class SpriteCharacter {
 	public void setSpeed(int speed) {
 		this.speed = speed;
 		Camera.movingSpeed = this.speed;
+	}
+
+	public int getHealth() {
+		return health;
+	}
+
+	public void setHealth(int health) {
+		this.health = health;
 	}
 	
 	

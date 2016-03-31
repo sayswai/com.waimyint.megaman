@@ -15,13 +15,28 @@ public class Keyboard {
 	public static void initializeKb() {
 		
 		Window.window.addKeyListener(new KeyListener() {
+			/*
             public void keyPressed(KeyEvent keyEvent) {
                 kbState[keyEvent.getKeyCode()] = true;
             }
 
             public void keyReleased(KeyEvent keyEvent) {
                 kbState[keyEvent.getKeyCode()] = false;
-            }
+            }*/
+			
+			 public void keyPressed(KeyEvent keyEvent) {
+			        if (keyEvent.isAutoRepeat()) {
+			            return;
+			        }
+			        kbState[keyEvent.getKeyCode()] = true;
+			    }
+
+			 public void keyReleased(KeyEvent keyEvent) {
+			        if (keyEvent.isAutoRepeat()) {
+			            return;
+			        }
+			        kbState[keyEvent.getKeyCode()] = false;
+			    }
             
         });
 	}

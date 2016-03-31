@@ -6,10 +6,10 @@ public class Text {
 
 	private String text;
 	private int fontSize;
-	private int length;
 	private int[] position = new int[2];
 	private Color color;
 	private Font font;
+	private int length;
 	
 	public Text(String text)
 	{

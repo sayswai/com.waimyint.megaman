@@ -1,3 +1,4 @@
+
 import com.jogamp.newt.event.KeyEvent;
 
 
@@ -25,9 +26,10 @@ public class Player extends SpriteCharacter {
 		Pos[1] = 380;
 	}
 	
-	public void update()
+	public void updateMovement()
 	{
 		if(!isAi){
+
 			if(Keyboard.getKbPrevState()[KeyEvent.VK_ENTER])
 			{
 				noClip = true;
@@ -40,39 +42,42 @@ public class Player extends SpriteCharacter {
 				}
 				noClip = false;
 			}
-			//if (Keyboard.getKbState()[KeyEvent.VK_A] && inBounds(Pos[0]-speed, Pos[1], Window.window.getWidth(), Window.window.getHeight())) {//left
+
 			if (Keyboard.getKbState()[KeyEvent.VK_A]){
 					Pos[0] -= speed;
-					
-					/*Camera Update*/
-					if(Pos[0] < (Window.window.getWidth() * 1.50)){//Initiate camera scroll
-						if((Camera.x - speed) >= 0){//Check to see if camera will go past the left side
-							Camera.x -= speed;
-						}else{//reached the left end
-							Camera.x -= Camera.x;
-						}
+					if(Pos[0] < (Window.window.getWidth() * 1.50)){
+					/*
+					 * This "if" check allows the character to move to the center
+					 * before the camera moves.
+					 */
+						Camera.x -= speed;
 					}
 	            direction = 0;
+	            curr = rightMove;
 	       }
 	
 	       if (Keyboard.getKbState()[KeyEvent.VK_D]) {//right
 	    	   Pos[0] += speed;
-	       	  
-	       	  /*Camera Update*/
-	       	  if(Pos[0] > Window.window.getWidth()/2){//Scroll camera to the right only if Character is past the first-mid mark
-	       		  if((Camera.x + speed) < Window.window.getWidth()){
-	       			  Camera.x += speed;
-	       		  }else{
-	       			  int delta = Window.window.getWidth() - Camera.x;
-	       			  Camera.x += delta;
-	       		  }
-	       	  }
+	    	   if(Pos[0] > Window.window.getWidth()/2){
+	    		   /*
+					 * This "if" check allows the character to move to the center
+					 * before the camera moves.
+					 */
+	    		   Camera.x += speed;
+	    	   }
 			 
 	       	  direction = 1;
+	       	  curr = leftMove;
 	       }
 	
 	       if (Keyboard.getKbState()[KeyEvent.VK_W]) {//up
-	    	  Pos[1] -= speed;
+	    	   if(!noClip){
+	    		   if((Pos[1] - speed) > 275){
+	    		  Pos[1] -= speed;
+	    		   }
+	    	   }else{
+	    		   Pos[1] -= speed;
+	    	   }
 	          //CameraTest.y -= speed;
 	          
 	       }
@@ -83,8 +88,31 @@ public class Player extends SpriteCharacter {
 	       
 	       rPos[0] = Pos[0] - Camera.x;
 	       rPos[1] = Pos[1] - Camera.y;
-	       /*Boundary Checks*/
-	       if((rPos[0]+idleLeft.curFrameSize[0]) > Window.window.getWidth())
+	       idleLeft.update(); idleRight.update();
+	     }else{
+		       rPos[0] = Pos[0] - Camera.x;
+		       rPos[1] = Pos[1] - Camera.y;
+		       idleTex.update();
+		       curr = idleTex;
+				
+			if(Keyboard.getKbState()[KeyEvent.VK_N])
+			{isAimoving = true;}
+			if(Keyboard.getKbState()[KeyEvent.VK_M])
+			{isAimoving = false;}
+			
+			/*
+			if(isAimoving){
+			AIcontroller.move(this, leader);
+			}
+			*/
+	     }
+		
+		
+	}
+	
+	public void boundaryCheck(){
+		/*Boundary Check*/
+		if((rPos[0]+idleLeft.curFrameSize[0]) > Window.window.getWidth())
 	       {
 	    	   int delta = rPos[0] - (Window.window.getWidth() - idleLeft.curFrameSize[0]);
 	    	   rPos[0] -= delta;
@@ -106,43 +134,26 @@ public class Player extends SpriteCharacter {
 	    	   rPos[1] = 0;
 	    	   Pos[1] += 0;
 	       }
-	       System.out.println("rPosX: "+rPos[0]+" S.X: "+Pos[0]+" C.X: "+Camera.x);
-	       //System.out.println("rPoY: "+rPos[1] +" S.Y: "+Pos[1]+" C.Y: "+CameraTest.y);
 	       
-	       
-	       idleLeft.update(); idleRight.update();
-	       //System.out.println("X: " +Pos[0]+ " Y: "+Pos[1]);
-	              
-	       /*
-	       if(inJump)
-	       {
-	    	   jump();
-	       }
-	       if(Keyboard.getKbState()[KeyEvent.VK_SPACE]&& inJump)
-	       {
-	    	   jump();
-	       }
-	       if(Keyboard.getKbState()[KeyEvent.VK_SPACE] && inBounds(Pos[0], Pos[1]+speed, Window.window.getWidth(), Window.window.getHeight()-10)){
-	    	   inJump = true;
-	    	   beginJump = true;
-	    	   jump();
-	       }
-	       */
-	       
+	       /*Update Shape*/
+			shape.move(getX(), getY());
+			shape.resize(getWidth(), getHeight());
 		
-		}else{
-
-			if(Keyboard.getKbState()[KeyEvent.VK_N])
-			{isAimoving = true;}
-			if(Keyboard.getKbState()[KeyEvent.VK_M])
-			{isAimoving = false;}
 			
 			
-			if(isAimoving){
-			AIcontroller.move(this, leader);
-			}
-			
-		}
+	       /*Updates onScreen boolean to make sure things off screen aren't being drawn*/
+	       if(rPos[0] >= 0 && rPos[0] <= Window.window.getWidth())
+	       {
+	    	   if(rPos[1] >= 0 && rPos[1] <= Window.window.getHeight())
+	    	   {
+	    		   onScreen = true;
+	    	   }else{
+	    		   onScreen = false;
+	    	   }
+	       }else{
+	    	   onScreen = false;
+	       }
+	       
 	}
 	
 	/*
@@ -175,9 +186,48 @@ public class Player extends SpriteCharacter {
 	public int getY(){
 		return Pos[1];
 	}
-	
-	
-	
-	
+	public Player getLeader() {
+		return leader;
+	}
+	public void setLeader(Player leader) {
+		this.leader = leader;
+	}
+	public void updateProjectiles() {
+		for(int i = 0 ; i < projectiles.length; i++)
+		{
+
+			projectiles[i].updateFrame();
+			
+			if(!projectiles[i].inMotion)
+			{
+				
+				projectiles[i].endX = leader.getX()+leader.getWidth()/2;
+				projectiles[i].endY = leader.getY()+leader.getHeight()/2;
+				projectiles[i].inMotion = true;
+				projectiles[i].setLastMoveTime(System.nanoTime());
+			}else{
+					projectiles[i].move();
+				}
+			}
+		}
+	public void projectileCollision() {
+		for(int i = 0 ;i < projectiles.length; i++)
+		{
+			if(projectiles[i].overlap(leader.shape))//hits
+			{
+				if(projectiles[i].targetHit == false){
+					projectiles[i].targetHit = true;
+					projectiles[i].restart();
+				}
+			}
+		}
+	}
+	public void updateProjectileHits() {
+		if(projectiles[0].targetHit)
+		{
+			leader.health -= 2;
+			projectiles[0].targetHit = false;
+		}
+	}
 	
 }

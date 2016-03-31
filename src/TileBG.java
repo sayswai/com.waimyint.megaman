@@ -105,20 +105,20 @@ public class TileBG {
 		{
 			int startingXpos;
 			int loopStart;
-			if(Camera.x > 0){
-				Camera.updateOffset(tileWidth);
-				startingXpos = -(Camera.xOffset);
-				loopStart = Math.floorDiv(Camera.x - Camera.xOffset, tileWidth);
-			}else{
-				startingXpos = 0;
-				loopStart = 0;
-			}
-			
-			for(int x = loopStart; (x-loopStart) < maxTilesX; x++)
-			{
-				TGAController.glDrawSprite(Window.gl, tile.getTile(x, y), startingXpos, y*40, tileSize[0], tileSize[1]);
-				startingXpos += tileWidth;
-			}
+				if(Camera.x > 0){
+					Camera.updateOffset(tileWidth);
+					startingXpos = -(Camera.xOffset);
+					loopStart = Math.floorDiv(Camera.x - Camera.xOffset, tileWidth);
+				}else{
+					startingXpos = 0;
+					loopStart = 0;
+				}
+				
+				for(int x = loopStart; (x-loopStart) < maxTilesX; x++)
+				{
+					TGAController.glDrawSprite(Window.gl, tile.getTile(x, y), startingXpos, y*40, tileSize[0], tileSize[1]);
+					startingXpos += tileWidth;
+				}
 			
 		}
 	}

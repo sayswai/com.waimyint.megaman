@@ -148,16 +148,19 @@ public class main {
             }
 
             one.updateMovement();
+            
             int curFrameMs = 100;
      
 			/*Physics Update*/
             do{
-            	boo.updateMovement();
-            	boo.updateProjectiles();
             	Camera.boundaryUpdate();
             	one.boundaryCheck();
-            	one.collisionCheck(map);//later change map to a variable that points to current map
+            	if(one.collisionCheck(map)){//later change map to a variable that points to current map
+            		System.out.println("you hit a wall!");
+            	}
             	boo.boundaryCheck();
+            	boo.updateMovement();
+            	boo.updateProjectiles();
             	boo.projectileCollision();
             	lastPhysicsFrameMS += physicsDeltaMs;
             }while(lastPhysicsFrameMS + physicsDeltaMs < curFrameMs);
@@ -195,7 +198,7 @@ public class main {
             enemysHealth.draw();
             
             one.draw();
-             boo.draw();
+            boo.draw();
            
            
             

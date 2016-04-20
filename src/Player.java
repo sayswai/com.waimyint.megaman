@@ -15,7 +15,7 @@ public class Player extends SpriteCharacter {
 		super(name, speed, isAi);
 		
 		 /*Positioning Sprites Spawn point here*/
-        Pos[0] = Window.window.getWidth()/2;
+        Pos[0] = 20;
         Pos[1] = 380;
 	}
 	public Player(String name, int speed, boolean isAi, Player player)
@@ -30,88 +30,112 @@ public class Player extends SpriteCharacter {
 	
 	public void updateMovement()
 	{
-		if(!isAi){
-			prevPos[0] = Pos[0];
-			prevPos[1] = Pos[1];
-			
-			if(Keyboard.getKbPrevState()[KeyEvent.VK_ENTER])
-			{
-				noClip = true;
+		lastFrameTime = System.nanoTime();
+		
+		if(isGrounded){
+			yVelocity = 0;
+			if(Keyboard.getKbPrevState()[KeyEvent.VK_SPACE]){
+				//yVelocity = speed;
+				//isGrounded = false;
 			}
-			if(Keyboard.getKbPrevState()[KeyEvent.VK_BACK_SPACE])
-			{
-				if(Pos[1] <= 280)
-				{
-					Pos[1] = 300;
-				}
-				noClip = false;
-			}
-
-			if (Keyboard.getKbState()[KeyEvent.VK_A]){//left
-					Pos[0] -= speed;
-					if(Pos[0] < (Window.window.getWidth() * 1.50)){
-					/*
-					 * This "if" check allows the character to move to the center
-					 * before the camera moves.
-					 */
-						Camera.x -= speed;
-					}
-	            direction = 0;
-	            curr = rightMove;
-	       }
-	
-	       if (Keyboard.getKbState()[KeyEvent.VK_D]) {//right
-	    	   Pos[0] += speed;
-	    	   if(Pos[0] > Window.window.getWidth()/2){
-	    		   /*
-					 * This "if" check allows the character to move to the center
-					 * before the camera moves.
-					 */
-	    		   Camera.x += speed;
-	    	   }
-			 
-	       	  direction = 1;
-	       	  curr = leftMove;
-	       }
-	
-	       if (Keyboard.getKbState()[KeyEvent.VK_W]) {//up
-	    	   if(!noClip){
-	    		   if((Pos[1] - speed) > 275){
-	    		  Pos[1] -= speed;
-	    		   }
-	    	   }else{
-	    		   Pos[1] -= speed;
-	    	   }
-	          //CameraTest.y -= speed;
-	          
-	       }
-	       if (Keyboard.getKbState()[KeyEvent.VK_S]) {//down
-	           Pos[1] += speed;
-	           //CameraTest.y += speed;
-	       }
-	       
-	       updaterPos();
-	       idleLeft.update(); idleRight.update();
-	     }else{
-		       updaterPos();
-		       idleTex.update();
-		       curr = idleTex;
+			if(!isAi){
+				/*save last frame's positions*/
+				prevPos[0] = Pos[0];
+				prevPos[1] = Pos[1];
+				Camera.prevX = Camera.x;
+				Camera.prevY = Camera.y;
 				
-			if(Keyboard.getKbState()[KeyEvent.VK_N])
-			{isAimoving = true;}
-			if(Keyboard.getKbState()[KeyEvent.VK_M])
-			{isAimoving = false;}
+				if(Keyboard.getKbPrevState()[KeyEvent.VK_ENTER])
+				{
+					noClip = true;
+				}
+				if(Keyboard.getKbPrevState()[KeyEvent.VK_BACK_SPACE])
+				{
+					if(Pos[1] <= 280)
+					{
+						Pos[1] = 300;
+					}
+					noClip = false;
+				}
+	
+				if (Keyboard.getKbState()[KeyEvent.VK_A]){//left
+						Pos[0] -= speed;
+						if(Pos[0] < (Window.window.getWidth() * 1.50)){
+						/*
+						 * This "if" check allows the character to move to the center
+						 * before the camera moves.
+						 */
+							Camera.x -= speed;
+						}
+		            direction = 0;
+		            curr = rightMove;
+		       }
+		
+		       if (Keyboard.getKbState()[KeyEvent.VK_D]) {//right
+		    	   Pos[0] += speed;
+		    	   if(Pos[0] > Window.window.getWidth()/2){
+		    		   /*
+						 * This "if" check allows the character to move to the center
+						 * before the camera moves.
+						 */
+		    		   Camera.x += speed;
+		    	   }
+				 
+		       	  direction = 1;
+		       	  curr = leftMove;
+		       }
+		
+		       if (Keyboard.getKbState()[KeyEvent.VK_W]) {//up
+		    	   if(!noClip){
+		    		   if((Pos[1] - speed) > 275){
+		    		  Pos[1] -= speed;
+		    		   }
+		    	   }else{
+		    		   Pos[1] -= speed;
+		    	   }
+		          //CameraTest.y -= speed;
+		          
+		       }
+		       if (Keyboard.getKbState()[KeyEvent.VK_S]) {//down
+		           Pos[1] += speed;
+		           //CameraTest.y += speed;
+		       }
+		       
+		       updaterPos();
+		       idleLeft.update(); idleRight.update();
+		     }else{
+			       updaterPos();
+			       idleTex.update();
+			       curr = idleTex;
+					
+				if(Keyboard.getKbState()[KeyEvent.VK_N])
+				{isAimoving = true;}
+				if(Keyboard.getKbState()[KeyEvent.VK_M])
+				{isAimoving = false;}
+				
+				/*
+				if(isAimoving){
+				AIcontroller.move(this, leader);
+				}
+				*/
+		     }
+		
+		}else{
 			
-			/*
-			if(isAimoving){
-			AIcontroller.move(this, leader);
-			}
-			*/
-	     }
-		
-		
+		}
 	}
 	
+	public void stepBack()
+	{
+		Pos[0] = prevPos[0];
+		Pos[1] = prevPos[1];
+		Camera.x = Camera.prevX;
+		Camera.y = Camera.prevY;
+		
+
+	    updaterPos();
+		
+	}
 	public void boundaryCheck(){
 		/*Boundary Check*/
 		if((rPos[0]+idleLeft.curFrameSize[0]) > Window.window.getWidth())
@@ -219,7 +243,7 @@ public class Player extends SpriteCharacter {
 	public void projectileCollision() {
 		for(int i = 0 ;i < projectiles.length; i++)
 		{
-			if(projectiles[i].overlap(leader.shape))//hits
+			if(projectiles[i].overlap(leader.shape))//hits22
 			{
 				if(projectiles[i].targetHit == false){
 					projectiles[i].targetHit = true;
@@ -235,11 +259,35 @@ public class Player extends SpriteCharacter {
 			projectiles[0].targetHit = false;
 		}
 	}
-	public void collisionCheck(Level map) {
-		int[] topLeftTile = new int[2];
-		int[] topRightTile = new int[2];
-		int[] bottomLeftTile = new int[2];
-		int[] bottomRightTile = new int[2];
+	public boolean collisionCheck(Level map) {
+		
+		int[] topPhysics = new int[2];
+		int[] bottomPhysics = new int[2];
+		
+		double leftX = Math.ceil((double) (Pos[0]-30) / map.getTileWidth());//-30 for offset to perfect contact
+		double rightX = Math.ceil((double) (Pos[0]+22) / map.getTileWidth());//+22 for offset to perfect contact
+		double topY = Math.ceil((double) (Pos[1]-30) / map.getTileHeight());
+		double bottomY = Math.ceil((double) (Pos[1]+13) / map.getTileHeight());
+		
+		topPhysics[0] = map.getCurrentLevel().getTilePhysics((int) leftX,(int) topY);
+		topPhysics[1] = map.getCurrentLevel().getTilePhysics((int) rightX,(int) topY);
+
+		
+		bottomPhysics[0] = map.getCurrentLevel().getTilePhysics((int) leftX,(int) bottomY); 
+		bottomPhysics[1] = map.getCurrentLevel().getTilePhysics((int) rightX,(int) bottomY);
+		
+		boolean overlap = false;
+		for(int i = 0; i < 2 && !overlap; i++)
+		{
+			if(topPhysics[i] == 1 || bottomPhysics[i] == 1)
+			{
+				overlap = true;
+			}
+		}
+		if(overlap)
+			stepBack();
+		
+		return overlap;
 	}
 	
 }

@@ -6,6 +6,8 @@ public class Camera {
 	public static int y = 0;
 	public static int xOffset = 0;	
 	public static int movingSpeed = 0;
+	public static int prevX = 0;
+	public static int prevY = 0;
 	public static Shape shape;
 	
 	public static void updateOffset(int tileWidth) {

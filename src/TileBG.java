@@ -89,19 +89,16 @@ public class TileBG {
 		
 		for(int i = (maxTilesY - 4); i < maxTilesY-2; i++)
 		{
-			tile.setTile(7, i, bricks);
-			tile.setPhysics(7, i, 1);
+			tile.setTile(6, i, bricks);
+			tile.setPhysics(6, i, 1);
 		}
-		for(int i = 4; i < 7; i++)
+		for(int i = 3; i < 6; i++)
 		{
 			tile.setTile(i, maxTilesY-3, bricks);
 			tile.setPhysics(i, maxTilesY-3, 1);
 		}
-		for(int i = (maxTilesY -2); i < maxTilesY; i++)
-		{
-			tile.setTile(11, i, bricks);
-			tile.setPhysics(11, i, 1);
-		}
+		
+		
 		
 		for(int i = 15; i < 19; i++)
 		{
@@ -113,6 +110,24 @@ public class TileBG {
 		{
 			tile.setTile(18, i, bricks);
 			tile.setPhysics(18, i, 1);
+		}
+		
+		for(int i = (maxTilesY - 4); i < maxTilesY - 2; i++)
+		{
+			tile.setTile(21, i, bricks);
+			tile.setPhysics(21, i, 1);
+		}
+		
+		for(int i = (maxTilesY-2); i < maxTilesY; i++)
+		{
+			tile.setTile(24, i, bricks);
+			tile.setPhysics(24, i, 1);
+		}
+		
+		for(int i = 27; i < maxTilesX; i++)
+		{
+			tile.setTile(i, maxTilesY-3, bricks);
+			tile.setPhysics(i, maxTilesY-3, 1);
 		}
 	}
 	
@@ -181,7 +196,7 @@ public class TileBG {
 	
 	public int getTilePhysics(int x, int y)
 	{
-		return tile.getPhysics(x, y);
+			return tile.getPhysics(x, y);
 	}
 	public Tiles getTile()
 	{

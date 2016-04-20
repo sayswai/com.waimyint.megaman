@@ -9,7 +9,7 @@ public class Tiles {
 	private int maxX;
 	private int maxY;
 	private int[] tiles;
-	private int[] physics;
+	private int[] physics; //can't go through = 1; can go through = 0
 	private int totalTiles;
 	
 	private Shape shape;
@@ -71,7 +71,9 @@ public class Tiles {
 	}
 
 	public int getPhysics(int x, int y) {
-		return physics[y*width + x];
+		if(x <= maxX && y <= maxY-1)
+			return physics[y*width + x];
+		return 0;
 	}
 	
 	

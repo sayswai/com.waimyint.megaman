@@ -24,13 +24,13 @@ public class SpriteCharacter {
 	protected boolean isAi = false;
 	protected boolean isAimoving = false;
 	protected boolean onScreen = true;
-	protected boolean inJump = false;
-	protected boolean beginJump = false;
 	protected boolean noClip = false;
-	protected boolean endJump = false;
-	protected int	jumpVal = 0;
+	protected boolean isGrounded = true;
+	protected int yVelocity;
 	protected int direction = 0; //0 = left, 1 = right
-	protected int health;
+	protected int health; 
+	
+	float lastFrameTime;
 	
 	/*Player's Various Weapons*/
 	protected Projectile[] projectiles;

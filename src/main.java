@@ -25,7 +25,9 @@ public class main {
     	/*Initialize Objects*/
     	TextController.glWrite(Color.white, 0, spacing, "Initializing Objects..", font); spacing-=24;
     	Player one = new Player("Kirby", 4, false);
-    	Player boo = new Player("BOO", 3, true, one);
+    	Player boo = new Player("BOO", 3, true, one, 0);
+    	Player chase = new Player("Chasing Boo", 2, true, one, 1);
+    	chase.setPos(new int[]{300,300});
     	Level map = new Level(1);
     	
     	/*Initialize Text*/
@@ -100,9 +102,9 @@ public class main {
     	one.rightMove.def = rightMoving; 
     	one.leftMove.def = leftMoving; 
     	
-    	boo.leftMove.def = booMoveLeft;
-    	boo.rightMove.def = booMoveRight;
-    	boo.idleTex.def = booIdle;
+    	boo.leftMove.def = booMoveLeft; chase.leftMove.def = booMoveLeft;
+    	boo.rightMove.def = booMoveRight; chase.rightMove.def = booMoveRight;
+    	boo.idleTex.def = booIdle; chase.idleTex.def = booIdle;
     	
     	/*Physics Implementation*/
     	int physicsDeltaMs = 10;
@@ -148,6 +150,7 @@ public class main {
             }
 
             one.updateMovement();
+            chase.updateMovement();
             
             int curFrameMs = 100;
      
@@ -155,9 +158,11 @@ public class main {
             do{
             	Camera.boundaryUpdate();
             	one.boundaryCheck();
-            	if(one.collisionCheck(map)){//later change map to a variable that points to current map
+            	if(one.mapCollisionCheck(map)){//later change map to a variable that points to current map
             		System.out.println("you hit a wall!");
             	}
+            	
+            	//chase.collisionCheck(map);
             	boo.boundaryCheck();
             	boo.updateMovement();
             	boo.updateProjectiles();
@@ -165,7 +170,9 @@ public class main {
             	lastPhysicsFrameMS += physicsDeltaMs;
             }while(lastPhysicsFrameMS + physicsDeltaMs < curFrameMs);
             lastPhysicsFrameMS = 0;
-            
+            if(chase.overlap(chase.leader)){
+        		chase.leader.looseHealth();
+        	}
             boo.updateProjectileHits();
             
             /*health text*/
@@ -199,6 +206,7 @@ public class main {
             
             one.draw();
             boo.draw();
+            chase.draw();
            
            
             

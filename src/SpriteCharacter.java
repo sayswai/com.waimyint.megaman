@@ -29,11 +29,8 @@ public class SpriteCharacter {
 	protected int yVelocity;
 	protected int direction = 0; //0 = left, 1 = right
 	protected int health; 
-
-	int aiMode;
 	
 	float lastFrameTime;
-	float lastHit = 0;
 	
 	/*Player's Various Weapons*/
 	protected Projectile[] projectiles;
@@ -150,27 +147,13 @@ public class SpriteCharacter {
 					
 				}
 			}else{
-				if(aiMode == 0){
+				
 					idleTex.draw();
 				if(projectiles.length > 0)
 				{
 					for(int i = 0; i < projectiles.length; i++)
 					{
 						projectiles[i].draw();
-					}
-				}
-				}else if(aiMode == 1){
-					if(direction == 0)//left
-					{
-						leftMove.update();
-						leftMove.draw();
-					}else if(direction == 1){//right
-						rightMove.update();
-						rightMove.draw();
-					}else
-					{
-						idleTex.draw();
-						curr = idleTex;
 					}
 				}
 			}
@@ -315,18 +298,7 @@ public class SpriteCharacter {
 	public void setHealth(int health) {
 		this.health = health;
 	}
-	public void looseHealth() {
-		if(lastHit == 0)
-		{
-			lastHit = System.nanoTime();
-		}
-		
-		if(System.nanoTime() - lastHit > 1000000000)
-		{
-			lastHit = System.nanoTime();
-			this.health -= 2;
-		}
-	}
+	
 	
 	
 }

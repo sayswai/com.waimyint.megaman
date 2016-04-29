@@ -8,7 +8,7 @@ import com.jogamp.newt.event.KeyEvent;
 
 public class Player extends SpriteCharacter {
 	
-	 Player leader;
+	private Player leader;
 	
 	public Player(String name, int speed, boolean isAi)
 	{
@@ -18,13 +18,11 @@ public class Player extends SpriteCharacter {
         Pos[0] = 20;
         Pos[1] = 380;
 	}
-	public Player(String name, int speed, boolean isAi, Player player, int aiMode)
+	public Player(String name, int speed, boolean isAi, Player player)
 	{
 		super(name, speed, isAi);
 		
 		leader = player;
-		
-		this.aiMode = aiMode;
 		 /*Positioning Sprites Spawn point here*/
 		Pos[0] = 60;
 		Pos[1] = 380;
@@ -40,12 +38,10 @@ public class Player extends SpriteCharacter {
 				//yVelocity = speed;
 				//isGrounded = false;
 			}
-
-			prevPos[0] = Pos[0];
-			prevPos[1] = Pos[1];
-			
 			if(!isAi){
 				/*save last frame's positions*/
+				prevPos[0] = Pos[0];
+				prevPos[1] = Pos[1];
 				Camera.prevX = Camera.x;
 				Camera.prevY = Camera.y;
 				
@@ -108,7 +104,6 @@ public class Player extends SpriteCharacter {
 		       updaterPos();
 		       idleLeft.update(); idleRight.update();
 		     }else{
-		    	 if(aiMode == 0){//ai mode - 0 {stay still}
 			       updaterPos();
 			       idleTex.update();
 			       curr = idleTex;
@@ -123,38 +118,6 @@ public class Player extends SpriteCharacter {
 				AIcontroller.move(this, leader);
 				}
 				*/
-		    	 }else if(aiMode == 1){//ai mode - 1 {chasing}
-		    		 if(Pos[0] < leader.getX())
-		    		 {
-		    			 // bot is left of the character and bot is moving right
-		    			 Pos[0] += speed;
-		    			 direction = 1;
-		    			 curr = rightMove;
-		    		 }
-		    		 if(Pos[0] > leader.getX())
-		    		 {
-		    			 // bot is right of the character and bot is moving left
-		    			 Pos[0] -= speed;
-		    			 direction = 0;
-		    			 curr = leftMove;
-		    		 }
-		    		 if(leader.getY() > Pos[1])
-		    		 {
-		    			 //bot is above the character and bot is moving down
-		    			 Pos[1] += speed;
-		    			 curr = idleTex;
-		    		 }
-		    		 if(leader.getY() < Pos[1])
-		    		 {
-		    			 //bot is below the character and bot is moving up
-		    			 Pos[1] -= speed;
-		    			 curr = idleTex;
-		    		 }
-		    		 updaterPos();
-		    		 rightMove.update(); leftMove.update(); idleTex.update();
-		    		 shape.move(getX(), getY());
-		 			shape.resize(getWidth(), getHeight());
-		    	 }
 		     }
 		
 		}else{
@@ -296,7 +259,7 @@ public class Player extends SpriteCharacter {
 			projectiles[0].targetHit = false;
 		}
 	}
-	public boolean mapCollisionCheck(Level map) {
+	public boolean collisionCheck(Level map) {
 		
 		int[] topPhysics = new int[2];
 		int[] bottomPhysics = new int[2];
@@ -326,6 +289,5 @@ public class Player extends SpriteCharacter {
 		
 		return overlap;
 	}
-	
 	
 }
